@@ -1,0 +1,47 @@
+---
+title: "Homework Week 6"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+
+```{r}
+{
+  setwd("~/HomeworkWeek6")
+  mygenes <- read.csv('gene_dist_head.tsv',header = TRUE, sep = "\t",
+             quote = "\"", dec = ".", fill = TRUE)
+  library('ggplot2')
+  library('plotly')
+}
+```
+
+First, I use `setwd` to change the current working directory to Homework6, which is a local clone of my github repo. I also use `read.csv` to load data into dataframe `mygenes`. However, the separator is tab instead of comma. I use  `library` to load `ggplot2` and `plotly`.
+
+```{r}
+{
+  mygenessummary <- summary(mygenes)
+}
+```
+Then, I use `summary` to get the summary of dataframe `mygenes`. I also use `<-` to store the summary into another dataframe.
+
+```{r}
+{
+  autosomes<-c("1","2","3","4","5","6","7","8","9","10",
+              "11","12","13","14","15","16","17","18","19","20","21","22")  
+  genes<- mygenes[ which(mygenes$chr %in% autosomes), ] 
+  genes$chr <- factor(genes$chr, levels = autosomes) 
+  ggplot(data = genes) +  geom_bar(mapping = aes(x = chr, fill = feature), width = 1)
+}
+```
+Next, I used `autosomes<-c` to define a factor set of autosomes from 1 to 22, then I used `<-` to create a new dataframe called 'genes' which only has autosomes`chr %in% autosomes`. This will select every row where chr is one of the values in autosomes. For removing the factors and ordering them from alphabetical to numerical order, I used `factor` on `genes$chr`, and plotted in ggplot.
+
+```{r}
+{
+  ggplotly(ggplot(data = genes) +  geom_bar(mapping = aes(x = chr, fill = feature), width = 1))
+}
+```
+I added `ggplotly` to process the output of `ggplot` in order to make the plot interactive. 
+
